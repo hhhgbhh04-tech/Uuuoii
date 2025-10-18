@@ -124,6 +124,14 @@
             box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
             position: relative;
             animation: float 6s ease-in-out infinite;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
         }
 
         @keyframes float {
@@ -135,6 +143,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: none;
         }
 
         .profile-info {
@@ -240,6 +249,55 @@
         .highlight {
             color: var(--secondary);
             font-weight: 600;
+        }
+
+        /* Contacts Section */
+        .contacts {
+            padding: 100px 0;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .contact-card {
+            background: var(--gray);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+
+        .contact-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .contact-link:hover {
+            color: var(--primary);
         }
 
         /* Music Player */
@@ -352,6 +410,10 @@
                 left: 20px;
                 justify-content: space-between;
             }
+
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -372,7 +434,9 @@
     <section class="hero">
         <div class="container hero-content">
             <div class="profile-image">
-                <img src="1.jpg" alt="Алексей Сектнет">
+                <!-- Заглушка для изображения -->
+                Загрузите ваше фото 1.jpg
+                <img src="" alt="Алексей Сектнет" id="profileImg">
             </div>
             <div class="profile-info">
                 <h1 class="name">Алексей Сектнет</h1>
@@ -404,6 +468,36 @@
                 <p>Привет! Меня зовут Алексей, также известный как <span class="highlight">Sectnet</span> в интернете.</p>
                 <p>Я занимаюсь разработкой, технологиями и постоянно учусь чему-то новому. Всегда открыт для интересных проектов и сотрудничества.</p>
                 <p>Свяжитесь со мной через любой из предложенных мессенджеров — буду рад общению!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacts Section -->
+    <section class="contacts" id="contacts">
+        <div class="container">
+            <h2 class="section-title">Мои контакты</h2>
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram telegram"></i>
+                    </div>
+                    <h3 class="contact-title">Telegram</h3>
+                    <a href="https://t.me/sectnet" class="contact-link" target="_blank">@sectnet</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-comments chat"></i>
+                    </div>
+                    <h3 class="contact-title">Чат Хеситея</h3>
+                    <a href="https://t.me/+gsr0O5UDzJs1YjIy" class="contact-link" target="_blank">Перейти в чат</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-vk vk"></i>
+                    </div>
+                    <h3 class="contact-title">ВКонтакте</h3>
+                    <a href="https://vk.com/sectnet" class="contact-link" target="_blank">vk.com/sectnet</a>
+                </div>
             </div>
         </div>
     </section>
@@ -449,9 +543,13 @@
 
         // Try to autoplay music on page load
         window.addEventListener('load', function() {
-            audio.play().catch(error => {
-                console.log('Автовоспроизведение заблокировано. Нажмите кнопку воспроизведения.');
-            });
+            // Автовоспроизведение может быть заблокировано браузером
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('Автовоспроизведение заблокировано. Нажмите кнопку воспроизведения.');
+                });
+            }
         });
 
         playBtn.addEventListener('click', function() {
@@ -484,6 +582,25 @@
                 }
             });
         });
+
+        // Попытка загрузить изображение
+        const profileImg = document.getElementById('profileImg');
+        const profileImageContainer = document.querySelector('.profile-image');
+        
+        // Создаем изображение и проверяем, загружается ли оно
+        const testImage = new Image();
+        testImage.onload = function() {
+            // Если изображение загружено успешно, показываем его
+            profileImg.src = '1.jpg';
+            profileImg.style.display = 'block';
+            profileImageContainer.innerHTML = '';
+            profileImageContainer.appendChild(profileImg);
+        };
+        testImage.onerror = function() {
+            // Если изображение не загружено, оставляем заглушку
+            console.log('Изображение 1.jpg не найдено. Используется заглушка.');
+        };
+        testImage.src = '1.jpg';
     </script>
 </body>
 </html>
